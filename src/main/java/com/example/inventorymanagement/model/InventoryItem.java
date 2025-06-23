@@ -23,6 +23,33 @@ public class InventoryItem {
     @Temporal(TemporalType.DATE)
     private Date expiration;
 
+    private int cost;
+    private String currency;
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+    private String productdescription;
+
+    public String getProductdescription() {
+        return productdescription;
+    }
+
+    public void setProductdescription(String productdescription) {
+        this.productdescription = productdescription;
+    }
 
     private String status;
     @ManyToOne
