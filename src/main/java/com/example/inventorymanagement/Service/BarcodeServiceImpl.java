@@ -4,12 +4,12 @@ import com.example.inventorymanagement.model.Barcode;
 import com.example.inventorymanagement.model.InventoryItem;
 import com.example.inventorymanagement.repository.BarcodeRepository;
 import com.example.inventorymanagement.repository.ItemRepository;
+import com.example.inventorymanagement.util.BarcodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class BarcodeServiceImpl implements BarcodeService {
@@ -25,11 +25,20 @@ public class BarcodeServiceImpl implements BarcodeService {
         InventoryItem item = inventoryItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("InventoryItem not found"));
 
-        String barcodeValue = "EMART-" + UUID.randomUUID().toString();
+        String countryCode = "890"; // India
+        String manufacturerCode = item.getDistributor().getDistributorCode(); // Distributor code
+        String productCode = String.format("%05d", item.getId()); // Ensure 5 digits
 
-        Barcode barcode = new Barcode(barcodeValue, item);
+        String baseBarcode = countryCode + manufacturerCode + productCode; // Total 12 digits
+        int checkDigit = BarcodeUtil.calculateEAN13CheckDigit(baseBarcode);
+
+        String fullBarcode = baseBarcode + checkDigit;
+
+        Barcode barcode = new Barcode(fullBarcode, item);
         return barcodeRepository.save(barcode);
     }
+
+
 
     @Override
     public Barcode getBarcodeByCode(String code) {

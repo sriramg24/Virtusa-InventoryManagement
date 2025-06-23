@@ -1,7 +1,7 @@
 package com.example.inventorymanagement.controller;
 
 import com.example.inventorymanagement.DTO.UserDTO;
-import com.example.inventorymanagement.Mapper.UserMapper;
+import com.example.inventorymanagement.model.EAuthority;
 import com.example.inventorymanagement.model.User;
 import com.example.inventorymanagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,101 +12,60 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
-
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private UserService userService;
+
+    @PostMapping(value = "/add", consumes = "application/json")
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
-    // Create new user
-    @PostMapping("/add")
-    public String createUser(@RequestBody User user) {
-        userService.createUser(user);
-        return "New user added successfully!";
-    }
-
-    // Get all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
-        Optional<User> userOpt = userService.getUserById(id);
-        if (userOpt.isPresent()) {
-            UserDTO dto = UserMapper.toDTO(userOpt.get());
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<UserDTO> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
-    // Get user by email
-    @GetMapping("/email/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-    // Get user by username
-    @GetMapping("/username/{username}")
-    public Optional<User> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
-    }
-
-    // Update user
-    @PutMapping("/update/{id}")
-    public String updateUser(@PathVariable Integer id, @RequestBody User user) {
-        userService.updateUser(id, user);
-        return "User updated successfully!";
-    }
-
-    // Delete user
-    @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return "User deleted successfully!";
+        return ResponseEntity.noContent().build();
     }
 
-    // Enable user
-    @PutMapping("/enable/{id}")
-    public String enableUser(@PathVariable Integer id) {
-        userService.enableUser(id);
-        return "User enabled successfully!";
+    @PostMapping("/{id}/add-role/{role}")
+    public ResponseEntity<UserDTO> addRole(@PathVariable Integer id, @PathVariable EAuthority role) {
+        return ResponseEntity.ok(userService.addRoleToUser(id, role));
     }
 
-    // Disable user
-    @PutMapping("/disable/{id}")
-    public String disableUser(@PathVariable Integer id) {
-        userService.disableUser(id);
-        return "User disabled successfully!";
+    @PostMapping("/{id}/remove-role/{role}")
+    public ResponseEntity<UserDTO> removeRole(@PathVariable Integer id, @PathVariable EAuthority role) {
+        return ResponseEntity.ok(userService.removeRoleFromUser(id, role));
+    }
+    @GetMapping("/dto/{id}")
+    public ResponseEntity<UserDTO> getUserDTO(@PathVariable Integer id) {
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("/full/{id}")
+    public ResponseEntity<User> getFullUser(@PathVariable Integer id) {
+        Optional<User> user = userService.getRawUserById(id);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Lock user
-    @PutMapping("/lock/{id}")
-    public String lockUser(@PathVariable Integer id) {
-        userService.lockUser(id);
-        return "User locked successfully!";
-    }
-
-    // Unlock user
-    @PutMapping("/unlock/{id}")
-    public String unlockUser(@PathVariable Integer id) {
-        userService.unlockUser(id);
-        return "User unlocked successfully!";
-    }
-
-    // Change password
-    @PutMapping("/change-password/{id}")
-    public String changePassword(@PathVariable Integer id, @RequestBody String newPassword) {
-        userService.changePassword(id, newPassword);
-        return "Password changed successfully!";
-    }
 }
-

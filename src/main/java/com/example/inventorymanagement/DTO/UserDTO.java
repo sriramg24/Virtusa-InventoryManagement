@@ -1,6 +1,5 @@
 package com.example.inventorymanagement.DTO;
 
-
 import java.util.Set;
 
 public class UserDTO {
@@ -8,12 +7,9 @@ public class UserDTO {
     private Integer id;
     private String username;
     private String email;
-    private boolean enabled;
-    private boolean credentialsNonExpired;
-    private Set<String> authorities; // just names like "MAKER", "CHECKER"
+    private Set<String> authorities;
 
     // Getters and Setters
-
     public Integer getId() {
         return id;
     }
@@ -38,22 +34,6 @@ public class UserDTO {
         this.email = email;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-
     public Set<String> getAuthorities() {
         return authorities;
     }
@@ -62,4 +42,3 @@ public class UserDTO {
         this.authorities = authorities;
     }
 }
-

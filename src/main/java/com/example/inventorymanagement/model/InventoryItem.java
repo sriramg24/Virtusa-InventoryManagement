@@ -25,6 +25,18 @@ public class InventoryItem {
 
 
     private String status;
+    @ManyToOne
+    @JoinColumn(name = "distributor_id") // Foreign Key in InventoryItem table
+    private Distributor distributor;
+
+    public Distributor getDistributor() {
+        return distributor;
+    }
+
+    public void setDistributor(Distributor distributor) {
+        this.distributor = distributor;
+    }
+
 
     // Getters and Setters
 

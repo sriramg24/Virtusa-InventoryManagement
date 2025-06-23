@@ -1,9 +1,8 @@
 package com.example.inventorymanagement.Mapper;
 
-
 import com.example.inventorymanagement.DTO.UserDTO;
-import com.example.inventorymanagement.model.User;
 import com.example.inventorymanagement.model.Authority;
+import com.example.inventorymanagement.model.User;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,12 +14,10 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setEnabled(user.isEnabled());
-        dto.setCredentialsNonExpired(user.isCredentialsNonExpired());
 
         Set<String> authorityNames = user.getAuthorities()
                 .stream()
-                .map(Authority::getName)
+                .map(a -> a.getName().name())  // Convert enum to string
                 .collect(Collectors.toSet());
 
         dto.setAuthorities(authorityNames);
@@ -28,4 +25,3 @@ public class UserMapper {
         return dto;
     }
 }
-

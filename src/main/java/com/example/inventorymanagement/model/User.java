@@ -1,5 +1,6 @@
 package com.example.inventorymanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -15,12 +16,13 @@ public class User {
 
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
 
     private boolean enabled;
     private boolean credentialsNonExpired;
     private boolean accountNonLocked;
-    @JsonManagedReference
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_authorities",
@@ -30,70 +32,28 @@ public class User {
     private Set<Authority> authorities;
 
 
-    // Getters and Setters
-    // ... (Include existing getters/setters and add for authorities)
+    // Getters & Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public Integer getId() {
-        return id;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
-    public String getUsername() {
-        return username;
-    }
+    public boolean isCredentialsNonExpired() { return credentialsNonExpired; }
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public boolean isAccountNonLocked() { return accountNonLocked; }
+    public void setAccountNonLocked(boolean accountNonLocked) { this.accountNonLocked = accountNonLocked; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
+    public Set<Authority> getAuthorities() { return authorities; }
+    public void setAuthorities(Set<Authority> authorities) { this.authorities = authorities; }
 }
