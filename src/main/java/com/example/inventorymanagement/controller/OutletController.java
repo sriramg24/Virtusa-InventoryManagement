@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/outlets")
 public class OutletController {
-
     @Autowired
     private OutletService outletService;
 
