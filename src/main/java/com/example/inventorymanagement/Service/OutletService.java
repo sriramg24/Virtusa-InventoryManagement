@@ -14,30 +14,33 @@ public class OutletService {
     @Autowired
     private OutletRepository outletRepository;
 
-    public Outlet createOutlet(Outlet outlet) {
+    // Create or update outlet
+    public Outlet saveOutlet(Outlet outlet) {
         return outletRepository.save(outlet);
     }
 
+    // Get all outlets
     public List<Outlet> getAllOutlets() {
         return outletRepository.findAll();
     }
 
+    // Get outlet by ID
     public Optional<Outlet> getOutletById(Long id) {
         return outletRepository.findById(id);
     }
 
-    public Outlet updateOutlet(Long id, Outlet updatedOutlet) {
-        Outlet outlet = outletRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Outlet not found"));
-
-        outlet.setName(updatedOutlet.getName());
-        outlet.setLocation(updatedOutlet.getLocation());
-        outlet.setContactNumber(updatedOutlet.getContactNumber());
-        outlet.setManagerName(updatedOutlet.getManagerName());
-
-        return outletRepository.save(outlet);
+    // Update outlet by ID
+    public Optional<Outlet> updateOutlet(Long id, Outlet updatedOutlet) {
+        return outletRepository.findById(id).map(outlet -> {
+            outlet.setName(updatedOutlet.getName());
+            outlet.setLocation(updatedOutlet.getLocation());
+            outlet.setContactNumber(updatedOutlet.getContactNumber());
+            outlet.setManagerName(updatedOutlet.getManagerName());
+            return outletRepository.save(outlet);
+        });
     }
 
+    // Delete outlet by ID
     public void deleteOutlet(Long id) {
         outletRepository.deleteById(id);
     }

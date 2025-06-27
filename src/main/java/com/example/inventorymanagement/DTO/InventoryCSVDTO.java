@@ -1,76 +1,88 @@
 package com.example.inventorymanagement.DTO;
 
 public class InventoryCSVDTO {
-    private Integer id;
-    private String vendorCode;
+    private String name;
     private String categoryName;
-    private String productDescription;
-    private Integer count;
+    private Integer quantity;
+    private String expiration;
     private int cost;
     private String currency;
-    private String productExpiry;
+    private String productdescription;
+    private String status;
+    private String distributorCode;
 
-    public void setId(Integer id) {
-        this.id = id;
+    // Getters and setters
+
+    public String getName() {
+        return name;
     }
 
-    public void setVendorCode(String vendorCode) {
-        this.vendorCode = vendorCode;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public void setProductExpiry(String productExpiry) {
-        this.productExpiry = productExpiry;
-    }
-
-    public Integer getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCategoryName() {
         return categoryName;
     }
 
-    public String getProductDescription() {
-        return productDescription;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public String getVendorCode() {
-        return vendorCode;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public Integer getCount() {
-        return count;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getExpiration() {
+        return expiration;
+    }
+
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
     }
 
     public String getCurrency() {
         return currency;
     }
 
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public int getCost() {
         return cost;
     }
 
-    public String getProductExpiry() {
-        return productExpiry;
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public String getProductdescription() {
+        return productdescription;
+    }
+
+    public void setProductdescription(String productdescription) {
+        this.productdescription = productdescription;
+    }
+
+    public String getDistributorCode() {
+        return distributorCode;
+    }
+
+    public void setDistributorCode(String distributorCode) {
+        this.distributorCode = distributorCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
+

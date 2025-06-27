@@ -1,60 +1,53 @@
 package com.example.inventorymanagement.Service;
 
 import com.example.inventorymanagement.DTO.InventoryCSVDTO;
-import com.example.inventorymanagement.model.Category;
-import com.example.inventorymanagement.model.Distributor;
-import com.example.inventorymanagement.model.InventoryItem;
-import com.example.inventorymanagement.repository.CategoryRepository;
-import com.example.inventorymanagement.repository.DistributorRepository;
-import com.example.inventorymanagement.repository.ItemRepository;
+import com.example.inventorymanagement.model.*;
+import com.example.inventorymanagement.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class InventoryServiceImpl {
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemRepository inventoryRepo;
 
     @Autowired
-    private DistributorRepository distributorRepository;
+    private CategoryRepository categoryRepo;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private DistributorRepository distributorRepo;
 
-    public void saveInventoryFromCSV(List<InventoryCSVDTO> csvItems) {
-        for (InventoryCSVDTO dto : csvItems) {
+    public void saveInventoryFromCSV(List<InventoryCSVDTO> list) {
+        for (InventoryCSVDTO dto : list) {
             InventoryItem item = new InventoryItem();
 
-            item.setId(dto.getId());
-            item.setName(dto.getProductDescription());
-            item.setProductdescription(dto.getProductDescription());
-            item.setQuantity(dto.getCount());
+            item.setName(dto.getName());
+            item.setQuantity(dto.getQuantity());
             item.setCost(dto.getCost());
             item.setCurrency(dto.getCurrency());
+            item.setProductdescription(dto.getProductdescription());
+            item.setStatus(dto.getStatus());
 
-            try {
-                Date expiry = new SimpleDateFormat("yyyy-MM-dd").parse(dto.getProductExpiry());
-                item.setExpiration(expiry);
-            } catch (Exception e) {
-                throw new RuntimeException("Invalid date format for productExpiry: " + dto.getProductExpiry());
-            }
-
-            Distributor distributor = distributorRepository.findByDistributorCode(dto.getVendorCode())
-                    .orElseThrow(() -> new RuntimeException("Distributor not found: " + dto.getVendorCode()));
-            item.setDistributor(distributor);
-
-            Category category = categoryRepository.findByName(dto.getCategoryName())
+            Category category = categoryRepo.findByName(dto.getCategoryName())
                     .orElseThrow(() -> new RuntimeException("Category not found: " + dto.getCategoryName()));
             item.setCategory(category);
 
-            item.setStatus("ACTIVE");
+            Distributor distributor = distributorRepo.findByDistributorCode(dto.getDistributorCode())
+                    .orElseThrow(() -> new RuntimeException("Distributor not found: " + dto.getDistributorCode()));
+            item.setDistributor(distributor);
 
-            itemRepository.save(item);
+            try {
+                Date expiryDate = new SimpleDateFormat("yyyy-MM-dd").parse(dto.getExpiration());
+                item.setExpiration(expiryDate);
+            } catch (Exception e) {
+                throw new RuntimeException("Invalid date: " + dto.getExpiration());
+            }
+
+            inventoryRepo.save(item);
         }
     }
 }

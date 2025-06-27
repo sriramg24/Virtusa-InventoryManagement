@@ -1,7 +1,11 @@
 package com.example.inventorymanagement.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Outlet {
@@ -17,6 +21,18 @@ public class Outlet {
     private String contactNumber;
 
     private String managerName;
+    @JsonBackReference
+    @OneToMany(mappedBy = "outlet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OutletInventoryItem> outletInventoryItems = new ArrayList<>();
+
+    public List<OutletInventoryItem> getOutletInventoryItems() {
+        return outletInventoryItems;
+    }
+
+    public void setOutletInventoryItems(List<OutletInventoryItem> outletInventoryItems) {
+        this.outletInventoryItems = outletInventoryItems;
+    }
+
 
     // Constructors
     public Outlet() {}

@@ -7,19 +7,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/outlets")
+@CrossOrigin(origins = "*") // Allow frontend apps to access this API (modify as needed)
 public class OutletController {
 
     @Autowired
     private OutletService outletService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Outlet> addOutlet(@RequestBody Outlet outlet) {
-        return ResponseEntity.ok(outletService.createOutlet(outlet));
+    @PostMapping
+    public ResponseEntity<Outlet> createOutlet(@RequestBody Outlet outlet) {
+        Outlet savedOutlet = outletService.saveOutlet(outlet);
+        return ResponseEntity.ok(savedOutlet);
     }
 
+    // 📥 Get all outlets
     @GetMapping
     public ResponseEntity<List<Outlet>> getAllOutlets() {
         return ResponseEntity.ok(outletService.getAllOutlets());
@@ -27,14 +31,16 @@ public class OutletController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Outlet> getOutletById(@PathVariable Long id) {
-        return outletService.getOutletById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Outlet> outlet = outletService.getOutletById(id);
+        return outlet.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Outlet> updateOutlet(@PathVariable Long id, @RequestBody Outlet outlet) {
-        return ResponseEntity.ok(outletService.updateOutlet(id, outlet));
+    public ResponseEntity<Outlet> updateOutlet(@PathVariable Long id, @RequestBody Outlet outletDetails) {
+        Optional<Outlet> updatedOutlet = outletService.updateOutlet(id, outletDetails);
+        return updatedOutlet.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -43,4 +49,3 @@ public class OutletController {
         return ResponseEntity.noContent().build();
     }
 }
-
