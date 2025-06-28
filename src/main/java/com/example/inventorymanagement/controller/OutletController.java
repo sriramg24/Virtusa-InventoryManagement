@@ -13,7 +13,6 @@ import java.util.Optional;
 @RequestMapping("/api/outlets")
 @CrossOrigin(origins = "*") // Allow frontend apps to access this API (modify as needed)
 public class OutletController {
-
     @Autowired
     private OutletService outletService;
 
